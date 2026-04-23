@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Green Market | কৃষক থেকে গ্রাহক - সিন্ডিকেট মুক্ত বাজার</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #fafaf8; scroll-behavior: smooth; }
+        .glass-card { background: rgba(255,255,255,0.95); backdrop-filter: blur(0px); transition: all 0.25s ease; }
+        .hover-lift:hover { transform: translateY(-6px); box-shadow: 0 20px 25px -12px rgba(0,0,0,0.1); }
+        .btn-gradient { background: linear-gradient(105deg, #2b6e3c 0%, #1f8a4c 100%); }
+        .btn-gradient:hover { background: linear-gradient(105deg, #1f5a33 0%, #166d3e 100%); transform: scale(1.02); }
+        .cart-badge { position: absolute; top: -8px; right: -10px; background: #f97316; color: white; border-radius: 9999px; padding: 2px 6px; font-size: 11px; font-weight: bold; }
+        .modal { transition: opacity 0.25s ease; }
+        .hero-fancy { font-family: 'Playfair Display', serif; font-weight: 800; letter-spacing: -0.02em; }
+        .product-card { transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1); }
+        .product-card:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 25px 35px -12px rgba(0,0,0,0.15); }
+        .detail-overlay { background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); }
+        .gradient-border { border-image: linear-gradient(135deg, #2b6e3c, #f59e0b) 1; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Navigation -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm sticky top-0 z-50 border-b border-gray-100">
+        <div class="container mx-auto px-5 lg:px-8 py-3 flex justify-between items-center flex-wrap">
+            <div class="flex items-center space-x-2">
+                <div class="w-9 h-9 rounded-full bg-green-700 flex items-center justify-center"><i class="fas fa-leaf text-white text-lg"></i></div>
+                <span class="text-2xl font-extrabold tracking-tight text-gray-800">Green<span class="text-green-700">Market</span></span>
+            </div>
+            <div class="hidden md:flex space-x-7 text-gray-600 font-medium">
+                <a href="#" class="hover:text-green-700 transition">হোম</a>
+                <a href="#products" class="hover:text-green-700 transition">পণ্য</a>
+                <a href="#farmers" class="hover:text-green-700 transition">কৃষক</a>
+                <a href="#howitworks" class="hover:text-green-700 transition">কীভাবে কাজ করে</a>
+                <a href="#contact" class="hover:text-green-700 transition">যোগাযোগ</a>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="relative cursor-pointer group" id="cartIconBtn">
+                    <i class="fas fa-shopping-cart text-xl text-gray-700"></i>
+                    <span id="cartCount" class="cart-badge">0</span>
+                </div>
+                <div id="authSection">
+                    <button id="loginBtn" class="hidden md:block px-5 py-2 text-green-700 border border-green-600 rounded-full hover:bg-green-50 transition text-sm font-semibold">লগইন</button>
+                    <button id="registerBtn" class="px-5 py-2 bg-green-700 text-white rounded-full hover:bg-green-800 transition text-sm font-semibold shadow-md">নিবন্ধন</button>
+                </div>
+                <div id="userMenu" class="hidden relative">
+                    <button id="userDropdownBtn" class="flex items-center space-x-2 bg-gray-100 px-3 py-2 rounded-full"><i class="fas fa-user-circle text-green-700 text-xl"></i><span id="userNameDisplay" class="text-sm font-medium">কৃষক</span><i class="fas fa-chevron-down text-xs"></i></button>
+                    <div id="dropdownMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg hidden z-50">
+                        <button id="myOrdersBtn" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-xl"><i class="fas fa-box mr-2 text-green-600"></i>আমার অর্ডার</button>
+                        <button id="logoutBtn" class="block w-full text-left px-4 py-2 text-red-600 hover:bg-gray-100 rounded-xl">লগআউট</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative overflow-hidden bg-gradient-to-br from-green-50 via-white to-emerald-50 py-20 md:py-28">
+        <div class="container mx-auto px-5 lg:px-8 relative z-10">
+            <div class="flex flex-col lg:flex-row items-center justify-between gap-12">
+                <div class="lg:w-1/2 text-center lg:text-left">
+                    <div class="inline-block bg-green-100 text-green-800 px-4 py-1 rounded-full text-sm font-semibold mb-5 animate-pulse"><i class="fas fa-handshake mr-1"></i> সরাসরি কৃষক থেকে ক্রেতা</div>
+                    <h1 class="hero-fancy text-4xl lg:text-6xl font-extrabold leading-tight text-gray-900">সিন্ডিকেট ভাঙো,<br><span class="text-green-700">Green Market</span> এ যুক্ত হও</h1>
+                    <p class="text-gray-600 text-lg mt-6 max-w-xl mx-auto lg:mx-0">মধ্যস্বত্বভোগী ছাড়াই তাজা ফসল কিনুন। কৃষক পায় ন্যায্য দাম, আপনি পান ৩০% পর্যন্ত সাশ্রয়ী মূল্য।</p>
+                    <div class="mt-8 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                        <a href="#products" class="btn-gradient text-white font-semibold px-8 py-3.5 rounded-full shadow-lg flex items-center justify-center gap-2 text-lg"><i class="fas fa-store"></i> এখনই কিনুন</a>
+                        <button class="bg-white border border-gray-300 text-gray-800 px-8 py-3.5 rounded-full font-semibold shadow-sm hover:shadow-md transition flex items-center justify-center gap-2" onclick="document.getElementById('registerBtn').click()"><i class="fas fa-tractor"></i> কৃষক হিসেবে যোগ দিন</button>
+                    </div>
+                </div>
+                <div class="lg:w-1/2 flex justify-center">
+                    <div class="relative group">
+                        <div class="absolute -top-6 -left-6 w-48 h-48 bg-green-200 rounded-full opacity-50 blur-2xl group-hover:opacity-75 transition"></div>
+                        <img src="https://images.unsplash.com/photo-1464226184884-fa280b87c399?q=80&w=1170&auto=format&fit=crop" alt="Green Market Farmers" class="rounded-3xl shadow-2xl object-cover w-full max-w-md lg:max-w-lg border-4 border-white transform transition group-hover:scale-105 duration-500">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-white to-transparent"></div>
+    </section>
+
+    <!-- Categories Filter -->
+    <section class="py-12 bg-white">
+        <div class="container mx-auto px-5 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl font-bold text-gray-800">ব্রাউজ ক্যাটাগরি</h2>
+                <p class="text-gray-500 mt-2">আপনার পছন্দের পণ্যের ধরণ নির্বাচন করুন</p>
+            </div>
+            <div class="flex flex-wrap justify-center gap-3 mb-10" id="categoryFilter">
+                <button data-cat="all" class="cat-btn active-cat px-5 py-2 rounded-full bg-green-700 text-white shadow-md">সব</button>
+                <button data-cat="vegetables" class="cat-btn px-5 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-green-100">শাকসবজি</button>
+                <button data-cat="fruits" class="cat-btn px-5 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-green-100">ফলমূল</button>
+                <button data-cat="grains" class="cat-btn px-5 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-green-100">শস্য ও মসলা</button>
+                <button data-cat="fish" class="cat-btn px-5 py-2 rounded-full bg-gray-100 text-gray-700 hover:bg-green-100">মাছ ও মাংস</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Product Grid -->
+    <section id="products" class="pb-16 bg-white">
+        <div class="container mx-auto px-5 lg:px-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7" id="productGrid">
+                <div class="col-span-full text-center py-10 text-gray-400"><i class="fas fa-spinner fa-spin text-3xl"></i><p class="mt-2">পণ্য লোড হচ্ছে...</p></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it works -->
+    <section id="howitworks" class="py-16 bg-green-50">
+        <div class="container mx-auto px-5 lg:px-8">
+            <div class="bg-white rounded-3xl p-8 lg:p-12 shadow-xl">
+                <div class="text-center max-w-3xl mx-auto">
+                    <i class="fas fa-handshake text-5xl text-green-700 mb-4"></i>
+                    <h2 class="text-3xl font-bold text-gray-800">🚀 সিন্ডিকেট ভাঙার প্ল্যাটফর্ম</h2>
+                    <p class="text-gray-600 text-lg mt-3">Green Market সরাসরি সংযোগ তৈরি করে দেয় কৃষক ও ভোক্তার মধ্যে — কোনো মধ্যস্বত্বভোগী, কোনো কার্টেল নয়।</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
+                        <div class="text-center p-4 rounded-2xl bg-green-50"><div class="w-16 h-16 bg-green-700 text-white rounded-full flex items-center justify-center mx-auto text-2xl">১</div><h3 class="font-bold mt-3">কৃষক নিবন্ধন</h3><p class="text-sm">মোবাইল বা ওয়েবসাইটে সহজ রেজিস্ট্রেশন</p></div>
+                        <div class="text-center p-4 rounded-2xl bg-green-50"><div class="w-16 h-16 bg-green-700 text-white rounded-full flex items-center justify-center mx-auto text-2xl">২</div><h3 class="font-bold mt-3">পণ্য তালিকাভুক্তি</h3><p class="text-sm">কৃষক নিজের পণ্যের ছবি ও দাম দিবে</p></div>
+                        <div class="text-center p-4 rounded-2xl bg-green-50"><div class="w-16 h-16 bg-green-700 text-white rounded-full flex items-center justify-center mx-auto text-2xl">৩</div><h3 class="font-bold mt-3">সরাসরি অর্ডার</h3><p class="text-sm">ক্রেতা সরাসরি কৃষকের সাথে কথা বলে কিনবে</p></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Farmer Spotlight -->
+    <section id="farmers" class="py-16 bg-white">
+        <div class="container mx-auto px-5 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold">আমাদের নিবন্ধিত কৃষকরা</h2>
+            <p class="text-gray-500 mb-10">সারা বাংলাদেশ থেকে প্রত্যক্ষ সংযোগ</p>
+            <div class="flex flex-wrap justify-center gap-8">
+                <div class="bg-gray-50 rounded-2xl p-6 w-64 text-center shadow-md hover:shadow-lg transition"><img src="https://randomuser.me/api/portraits/men/32.jpg" class="w-28 h-28 rounded-full mx-auto mb-3 object-cover border-4 border-green-200"><h3 class="font-bold text-xl">আব্দুল মান্নান</h3><p class="text-green-600">পটুয়াখালী</p><button class="mt-3 text-green-700 border border-green-600 px-4 py-1 rounded-full text-sm hover:bg-green-50">কৃষকের সাথে কথা বলুন</button></div>
+                <div class="bg-gray-50 rounded-2xl p-6 w-64 text-center shadow-md hover:shadow-lg transition"><img src="https://randomuser.me/api/portraits/women/68.jpg" class="w-28 h-28 rounded-full mx-auto mb-3 object-cover border-4 border-green-200"><h3 class="font-bold text-xl">মরিয়ম বেগম</h3><p class="text-green-600">সিলেট</p><button class="mt-3 text-green-700 border border-green-600 px-4 py-1 rounded-full text-sm hover:bg-green-50">কৃষকের সাথে কথা বলুন</button></div>
+                <div class="bg-gray-50 rounded-2xl p-6 w-64 text-center shadow-md hover:shadow-lg transition"><img src="https://randomuser.me/api/portraits/men/45.jpg" class="w-28 h-28 rounded-full mx-auto mb-3 object-cover border-4 border-green-200"><h3 class="font-bold text-xl">শফিকুল ইসলাম</h3><p class="text-green-600">নওগাঁ</p><button class="mt-3 text-green-700 border border-green-600 px-4 py-1 rounded-full text-sm hover:bg-green-50">কৃষকের সাথে কথা বলুন</button></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact/Lead Form -->
+    <section id="contact" class="py-16 bg-gray-50">
+        <div class="container mx-auto px-5 lg:px-8 max-w-3xl">
+            <div class="bg-white rounded-2xl shadow-xl p-8">
+                <div class="text-center mb-6">
+                    <i class="fas fa-envelope-open-text text-4xl text-green-700"></i>
+                    <h2 class="text-2xl font-bold mt-2">আপনার এলাকার কৃষক খুঁজুন</h2>
+                    <p class="text-gray-500">ফর্মটি পূরণ করলে আমরা সংযোগ করে দেব</p>
+                </div>
+                <form id="leadForm" class="space-y-5">
+                    <div><input type="text" id="leadName" placeholder="আপনার নাম *" class="w-full p-3 border border-gray-300 rounded-xl" required></div>
+                    <div><input type="tel" id="leadPhone" placeholder="মোবাইল নম্বর *" class="w-full p-3 border border-gray-300 rounded-xl" required></div>
+                    <div><input type="text" id="leadDistrict" placeholder="জেলা / উপজেলা" class="w-full p-3 border border-gray-300 rounded-xl"></div>
+                    <div><textarea id="leadInterest" rows="2" placeholder="কোন পণ্যে আগ্রহী? (যেমন: টমেটো, আলু, মাছ)" class="w-full p-3 border border-gray-300 rounded-xl"></textarea></div>
+                    <button type="submit" class="w-full bg-green-700 text-white py-3 rounded-xl font-bold text-lg hover:bg-green-800 transition shadow-md"><i class="fas fa-link"></i> কৃষকের সাথে সংযুক্ত হন</button>
+                </form>
+                <p class="text-xs text-center text-gray-400 mt-4"><i class="fas fa-shield-alt"></i> আপনার তথ্য নিরাপদে ডাটাবেসে সংরক্ষিত হবে</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-10">
+        <div class="container mx-auto px-5 text-center">
+            <div class="flex justify-center space-x-6 text-2xl mb-5">
+                <i class="fab fa-facebook-f hover:text-green-400 cursor-pointer"></i>
+                <i class="fab fa-whatsapp hover:text-green-400 cursor-pointer"></i>
+                <i class="fab fa-android hover:text-green-400 cursor-pointer"></i>
+                <i class="fab fa-apple hover:text-green-400 cursor-pointer"></i>
+            </div>
+            <p class="text-sm">© 2025 Green Market - কৃষক বান্ধব প্ল্যাটফর্ম | সিন্ডিকেট মুক্ত বাংলাদেশ</p>
+            <p class="text-xs mt-2 opacity-70">Web | Mobile App (Android/iOS) | Desktop App (Electron) - কমিশন ফ্রি মডেল</p>
+        </div>
+    </footer>
+
+    <!-- ========== MODALS ========== -->
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-bold"><i class="fas fa-shopping-cart text-green-700 mr-2"></i>আপনার কার্ট</h3>
+                <button id="closeCartModal" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <div id="cartItemsList" class="py-4 max-h-80 overflow-y-auto space-y-2">
+                <p class="text-gray-500 text-center">কার্ট খালি</p>
+            </div>
+            <div class="border-t pt-4 flex justify-between font-bold text-lg">
+                <span>মোট:</span>
+                <span id="cartTotalAmount">৳ ০</span>
+            </div>
+            <button id="checkoutBtn" class="mt-4 w-full bg-green-700 text-white py-2 rounded-full hover:bg-green-800">অর্ডার নিশ্চিত করুন</button>
+        </div>
+    </div>
+
+    <!-- Product Details Modal -->
+    <div id="productDetailModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-lg p-6 relative max-h-[90vh] overflow-y-auto">
+            <button id="closeDetailModal" class="absolute top-4 right-4 text-gray-500 text-2xl hover:text-gray-700">&times;</button>
+            <div id="detailContent"></div>
+        </div>
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-bold">লগইন করুন</h3>
+                <button id="closeLoginModal" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <form id="loginFormModal" class="mt-4 space-y-4">
+                <input type="text" id="loginPhone" placeholder="মোবাইল নম্বর (যেমন: 01712345678)" class="w-full p-3 border rounded-xl" required>
+                <input type="password" id="loginPassword" placeholder="পাসওয়ার্ড" class="w-full p-3 border rounded-xl" required>
+                <div id="loginError" class="text-red-500 text-sm hidden"></div>
+                <button type="submit" id="loginSubmitBtn" class="w-full bg-green-700 text-white py-2 rounded-full hover:bg-green-800">প্রবেশ করুন</button>
+            </form>
+            <p class="text-center text-sm mt-3">নতুন? <button id="switchToRegisterFromLogin" class="text-green-700 font-semibold">নিবন্ধন করুন</button></p>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="registerModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-bold">নিবন্ধন করুন</h3>
+                <button id="closeRegisterModal" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <form id="registerFormModal" class="mt-4 space-y-4">
+                <input type="text" id="regName" placeholder="আপনার নাম" class="w-full p-3 border rounded-xl" required>
+                <input type="tel" id="regPhone" placeholder="মোবাইল নম্বর" class="w-full p-3 border rounded-xl" required>
+                <input type="password" id="regPassword" placeholder="পাসওয়ার্ড" class="w-full p-3 border rounded-xl" required>
+                <div id="registerError" class="text-red-500 text-sm hidden"></div>
+                <button type="submit" id="registerSubmitBtn" class="w-full bg-green-700 text-white py-2 rounded-full hover:bg-green-800">একাউন্ট তৈরি করুন</button>
+            </form>
+            <p class="text-center text-sm mt-3">ইতিমধ্যে একাউন্ট আছে? <button id="switchToLoginFromRegister" class="text-green-700 font-semibold">লগইন করুন</button></p>
+        </div>
+    </div>
+
+    <!-- My Orders Modal -->
+    <div id="ordersModal" class="modal fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-2xl w-full max-w-lg p-6 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b pb-3">
+                <h3 class="text-xl font-bold"><i class="fas fa-box text-green-700 mr-2"></i>আমার অর্ডার</h3>
+                <button id="closeOrdersModal" class="text-gray-400 hover:text-gray-600 text-2xl">&times;</button>
+            </div>
+            <div id="ordersList" class="py-4"></div>
+        </div>
+    </div>
+
+    <script>
+        // ========== CONFIG ==========
+        const API = ''; // empty = same server (relative URLs)
+
+        // ========== STATE ==========
+        let cart = JSON.parse(localStorage.getItem('greenmarket_cart')) || [];
+        let token = localStorage.getItem('gm_token') || null;
+        let currentUser = JSON.parse(localStorage.getItem('gm_user') || 'null');
+        let isLoggedIn = !!token;
+        let allProducts = [];
+        let activeCategory = 'all';
+
+        // ========== API HELPERS ==========
+        async function apiGet(url) {
+            const res = await fetch(API + url, {
+                headers: token ? { Authorization: 'Bearer ' + token } : {}
+            });
+            return res.json();
+        }
+
+        async function apiPost(url, data) {
+            const res = await fetch(API + url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token ? { Authorization: 'Bearer ' + token } : {})
+                },
+                body: JSON.stringify(data)
+            });
+            return res.json();
+        }
+
+        // ========== PRODUCTS ==========
+        async function loadProducts(category = 'all') {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-400"><i class="fas fa-spinner fa-spin text-3xl"></i></div>';
+            try {
+                const url = category === 'all' ? '/api/products' : `/api/products?category=${category}`;
+                allProducts = await apiGet(url);
+                renderProducts(allProducts);
+            } catch (err) {
+                grid.innerHTML = '<div class="col-span-full text-center py-10 text-red-400">পণ্য লোড করতে সমস্যা হয়েছে</div>';
+            }
+        }
+
+        function maskPhone(phone) {
+            if (!phone) return 'নম্বর নেই';
+            if (isLoggedIn) return phone;
+            return phone.slice(0, 5) + '*****';
+        }
+
+        function renderProducts(products) {
+            const grid = document.getElementById('productGrid');
+            if (!products.length) {
+                grid.innerHTML = '<div class="col-span-full text-center py-10 text-gray-500">কোন পণ্য পাওয়া যায়নি</div>';
+                return;
+            }
+            grid.innerHTML = products.map(p => `
+                <div class="bg-white rounded-2xl overflow-hidden shadow-lg product-card border border-gray-100">
+                    <img src="${p.img}" class="w-full h-52 object-cover" alt="${p.name}" onerror="this.src='https://via.placeholder.com/400x200?text=No+Image'">
+                    <div class="p-5">
+                        <h3 class="font-bold text-xl">${p.name}</h3>
+                        <div class="flex items-center text-sm text-gray-500 mt-1"><i class="fas fa-map-marker-alt text-green-600 mr-1"></i> ${p.location || ''}</div>
+                        <div class="flex justify-between items-center mt-3">
+                            <span class="text-green-700 font-extrabold text-2xl">৳ ${p.price}</span>
+                            <span class="text-sm text-gray-400">/${p.unit}</span>
+                        </div>
+                        <div class="flex gap-2 mt-4">
+                            <button onclick="addToCart(${p.id}, '${p.name}', ${p.price})" class="flex-1 bg-amber-500 hover:bg-amber-600 text-white py-2 rounded-full text-sm font-semibold transition"><i class="fas fa-cart-plus mr-1"></i> কিনুন</button>
+                            <button onclick="showProductDetail(${p.id})" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-800 py-2 rounded-full text-sm font-semibold transition"><i class="fas fa-info-circle"></i> বিস্তারিত</button>
+                        </div>
+                        <div class="mt-3 flex items-center text-xs text-gray-500 border-t pt-2"><i class="fas fa-user-check text-green-500 mr-1"></i> কৃষক: ${p.farmer || 'অজানা'}</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        window.showProductDetail = function(id) {
+            const product = allProducts.find(p => p.id === id);
+            if (!product) return;
+            const loginMsg = !isLoggedIn ? '<p class="text-xs text-amber-600 mt-2 bg-amber-50 p-2 rounded-lg"><i class="fas fa-lock mr-1"></i> সম্পূর্ণ নম্বর দেখতে লগইন করুন</p>' : '';
+            document.getElementById('detailContent').innerHTML = `
+                <div class="text-center">
+                    <img src="${product.img}" class="w-full h-64 object-cover rounded-2xl mb-4">
+                    <h2 class="text-2xl font-bold">${product.name}</h2>
+                    <p class="text-green-700 text-xl font-bold mt-1">৳ ${product.price} / ${product.unit}</p>
+                    <div class="mt-4 text-left bg-gray-50 p-4 rounded-xl space-y-2">
+                        <p><i class="fas fa-user text-green-600 w-6"></i> কৃষক: ${product.farmer || 'অজানা'}</p>
+                        <p><i class="fas fa-map-marker-alt text-green-600 w-6"></i> অবস্থান: ${product.location || 'অজানা'}</p>
+                        <p><i class="fas fa-phone text-green-600 w-6"></i> যোগাযোগ: <span class="font-mono">${maskPhone(product.phone)}</span></p>
+                        <p><i class="fas fa-align-left text-green-600 w-6"></i> বিবরণ: ${product.description || ''}</p>
+                        ${loginMsg}
+                    </div>
+                    <button onclick="addToCart(${product.id}, '${product.name}', ${product.price}); document.getElementById('productDetailModal').classList.add('hidden');" class="mt-4 w-full bg-green-700 text-white py-2 rounded-full hover:bg-green-800">কার্টে যোগ করুন</button>
+                </div>
+            `;
+            document.getElementById('productDetailModal').classList.remove('hidden');
+        };
+
+        // ========== CART ==========
+        window.addToCart = function(id, name, price) {
+            const existing = cart.find(i => i.id === id);
+            if (existing) existing.quantity++;
+            else cart.push({ id, name, price, quantity: 1 });
+            updateCartUI();
+            // toast notification
+            showToast(`✅ ${name} কার্টে যোগ হয়েছে!`);
+        };
+
+        window.changeQuantity = function(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.quantity += delta;
+                if (item.quantity <= 0) cart = cart.filter(i => i.id !== id);
+                updateCartUI();
+            }
+        };
+
+        window.removeFromCart = function(id) {
+            cart = cart.filter(i => i.id !== id);
+            updateCartUI();
+        };
+
+        function updateCartUI() {
+            const totalItems = cart.reduce((sum, i) => sum + i.quantity, 0);
+            document.getElementById('cartCount').innerText = totalItems;
+            localStorage.setItem('greenmarket_cart', JSON.stringify(cart));
+            renderCartModal();
+        }
+
+        function renderCartModal() {
+            const container = document.getElementById('cartItemsList');
+            if (!cart.length) {
+                container.innerHTML = '<p class="text-gray-500 text-center">কার্ট খালি</p>';
+                document.getElementById('cartTotalAmount').innerText = '৳ ০';
+                return;
+            }
+            let total = 0;
+            container.innerHTML = cart.map(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+                return `
+                    <div class="flex justify-between items-center border-b pb-2 mb-2">
+                        <div class="flex-1">
+                            <p class="font-semibold">${item.name}</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <button onclick="changeQuantity(${item.id}, -1)" class="bg-gray-200 px-2 rounded-full">-</button>
+                                <span>${item.quantity}</span>
+                                <button onclick="changeQuantity(${item.id}, 1)" class="bg-gray-200 px-2 rounded-full">+</button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <p>৳ ${itemTotal}</p>
+                            <button onclick="removeFromCart(${item.id})" class="text-red-500 text-xs"><i class="fas fa-trash-alt"></i> রিমুভ</button>
+                        </div>
+                    </div>`;
+            }).join('');
+            document.getElementById('cartTotalAmount').innerText = `৳ ${total}`;
+        }
+
+        // ========== CHECKOUT ==========
+        document.getElementById('checkoutBtn').addEventListener('click', async () => {
+            if (!cart.length) { showToast('কার্ট খালি আছে', 'error'); return; }
+            if (!isLoggedIn) {
+                showToast('অর্ডার দিতে আগে লগইন করুন', 'warning');
+                document.getElementById('cartModal').classList.add('hidden');
+                document.getElementById('loginModal').classList.remove('hidden');
+                return;
+            }
+            const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+            try {
+                const res = await apiPost('/api/orders', { items: cart, total });
+                if (res.success) {
+                    showToast(`🎉 অর্ডার #${res.orderId} সফল হয়েছে!`);
+                    cart = [];
+                    updateCartUI();
+                    document.getElementById('cartModal').classList.add('hidden');
+                } else {
+                    showToast(res.error || 'অর্ডার দিতে সমস্যা হয়েছে', 'error');
+                }
+            } catch {
+                showToast('সার্ভারে সংযোগ সমস্যা', 'error');
+            }
+        });
+
+        // ========== AUTH ==========
+        function updateAuthUI() {
+            const authSection = document.getElementById('authSection');
+            const userMenu = document.getElementById('userMenu');
+            if (isLoggedIn && currentUser) {
+                authSection.classList.add('hidden');
+                userMenu.classList.remove('hidden');
+                document.getElementById('userNameDisplay').innerText = currentUser.name.split(' ')[0];
+            } else {
+                authSection.classList.remove('hidden');
+                userMenu.classList.add('hidden');
+            }
+            renderProducts(allProducts); // refresh phone masking
+        }
+
+        // Login
+        document.getElementById('loginFormModal').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('loginSubmitBtn');
+            const errDiv = document.getElementById('loginError');
+            btn.textContent = 'লোড হচ্ছে...'; btn.disabled = true;
+            errDiv.classList.add('hidden');
+            try {
+                const res = await apiPost('/api/login', {
+                    phone: document.getElementById('loginPhone').value.trim(),
+                    password: document.getElementById('loginPassword').value
+                });
+                if (res.success) {
+                    token = res.token;
+                    currentUser = res.user;
+                    isLoggedIn = true;
+                    localStorage.setItem('gm_token', token);
+                    localStorage.setItem('gm_user', JSON.stringify(currentUser));
+                    updateAuthUI();
+                    document.getElementById('loginModal').classList.add('hidden');
+                    showToast(`স্বাগতম ${res.user.name}! 🎉`);
+                    document.getElementById('loginFormModal').reset();
+                } else {
+                    errDiv.textContent = res.error; errDiv.classList.remove('hidden');
+                }
+            } catch {
+                errDiv.textContent = 'সার্ভারে সংযোগ সমস্যা'; errDiv.classList.remove('hidden');
+            }
+            btn.textContent = 'প্রবেশ করুন'; btn.disabled = false;
+        });
+
+        // Register
+        document.getElementById('registerFormModal').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('registerSubmitBtn');
+            const errDiv = document.getElementById('registerError');
+            btn.textContent = 'লোড হচ্ছে...'; btn.disabled = true;
+            errDiv.classList.add('hidden');
+            try {
+                const res = await apiPost('/api/register', {
+                    name: document.getElementById('regName').value.trim(),
+                    phone: document.getElementById('regPhone').value.trim(),
+                    password: document.getElementById('regPassword').value
+                });
+                if (res.success) {
+                    token = res.token;
+                    currentUser = res.user;
+                    isLoggedIn = true;
+                    localStorage.setItem('gm_token', token);
+                    localStorage.setItem('gm_user', JSON.stringify(currentUser));
+                    updateAuthUI();
+                    document.getElementById('registerModal').classList.add('hidden');
+                    showToast(`নিবন্ধন সফল! স্বাগতম ${res.user.name}! 🎉`);
+                    document.getElementById('registerFormModal').reset();
+                } else {
+                    errDiv.textContent = res.error; errDiv.classList.remove('hidden');
+                }
+            } catch {
+                errDiv.textContent = 'সার্ভারে সংযোগ সমস্যা'; errDiv.classList.remove('hidden');
+            }
+            btn.textContent = 'একাউন্ট তৈরি করুন'; btn.disabled = false;
+        });
+
+        // Logout
+        document.getElementById('logoutBtn').addEventListener('click', () => {
+            token = null; currentUser = null; isLoggedIn = false;
+            localStorage.removeItem('gm_token');
+            localStorage.removeItem('gm_user');
+            updateAuthUI();
+            document.getElementById('dropdownMenu').classList.add('hidden');
+            showToast('লগআউট সম্পন্ন');
+        });
+
+        // My Orders
+        document.getElementById('myOrdersBtn').addEventListener('click', async () => {
+            document.getElementById('dropdownMenu').classList.add('hidden');
+            document.getElementById('ordersModal').classList.remove('hidden');
+            const list = document.getElementById('ordersList');
+            list.innerHTML = '<p class="text-center text-gray-400"><i class="fas fa-spinner fa-spin"></i></p>';
+            try {
+                const orders = await apiGet('/api/orders/my');
+                if (!orders.length) { list.innerHTML = '<p class="text-center text-gray-500">কোনো অর্ডার নেই</p>'; return; }
+                list.innerHTML = orders.map(o => `
+                    <div class="border rounded-xl p-4 mb-3">
+                        <div class="flex justify-between">
+                            <span class="font-bold">অর্ডার #${o.id}</span>
+                            <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded-full">${o.status}</span>
+                        </div>
+                        <p class="text-sm text-gray-500 mt-1">${new Date(o.created_at).toLocaleString('bn-BD')}</p>
+                        <div class="mt-2 text-sm">${o.items.map(i => `${i.name} × ${i.quantity}`).join(', ')}</div>
+                        <p class="font-bold text-green-700 mt-1">মোট: ৳ ${o.total}</p>
+                    </div>
+                `).join('');
+            } catch { list.innerHTML = '<p class="text-red-500 text-center">লোড করতে সমস্যা হয়েছে</p>'; }
+        });
+
+        // Lead Form
+        document.getElementById('leadForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            try {
+                const res = await apiPost('/api/leads', {
+                    name: document.getElementById('leadName').value,
+                    phone: document.getElementById('leadPhone').value,
+                    district: document.getElementById('leadDistrict').value,
+                    interest: document.getElementById('leadInterest').value
+                });
+                if (res.success) {
+                    showToast('ধন্যবাদ! আপনার তথ্য সংরক্ষিত হয়েছে। 🙏');
+                    document.getElementById('leadForm').reset();
+                } else showToast(res.error, 'error');
+            } catch { showToast('সার্ভারে সংযোগ সমস্যা', 'error'); }
+        });
+
+        // Category filter
+        document.querySelectorAll('.cat-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.cat-btn').forEach(b => {
+                    b.classList.remove('bg-green-700', 'text-white');
+                    b.classList.add('bg-gray-100', 'text-gray-700');
+                });
+                this.classList.remove('bg-gray-100', 'text-gray-700');
+                this.classList.add('bg-green-700', 'text-white');
+                activeCategory = this.getAttribute('data-cat');
+                loadProducts(activeCategory);
+            });
+        });
+
+        // Modal controls
+        document.getElementById('cartIconBtn').addEventListener('click', () => { renderCartModal(); document.getElementById('cartModal').classList.remove('hidden'); });
+        document.getElementById('closeCartModal').addEventListener('click', () => document.getElementById('cartModal').classList.add('hidden'));
+        document.getElementById('loginBtn').addEventListener('click', () => document.getElementById('loginModal').classList.remove('hidden'));
+        document.getElementById('registerBtn').addEventListener('click', () => document.getElementById('registerModal').classList.remove('hidden'));
+        document.getElementById('closeLoginModal').addEventListener('click', () => document.getElementById('loginModal').classList.add('hidden'));
+        document.getElementById('closeRegisterModal').addEventListener('click', () => document.getElementById('registerModal').classList.add('hidden'));
+        document.getElementById('closeDetailModal').addEventListener('click', () => document.getElementById('productDetailModal').classList.add('hidden'));
+        document.getElementById('closeOrdersModal').addEventListener('click', () => document.getElementById('ordersModal').classList.add('hidden'));
+        document.getElementById('switchToRegisterFromLogin').addEventListener('click', () => { document.getElementById('loginModal').classList.add('hidden'); document.getElementById('registerModal').classList.remove('hidden'); });
+        document.getElementById('switchToLoginFromRegister').addEventListener('click', () => { document.getElementById('registerModal').classList.add('hidden'); document.getElementById('loginModal').classList.remove('hidden'); });
+
+        const userDropdownBtn = document.getElementById('userDropdownBtn');
+        userDropdownBtn.addEventListener('click', (e) => { e.stopPropagation(); document.getElementById('dropdownMenu').classList.toggle('hidden'); });
+        document.addEventListener('click', () => document.getElementById('dropdownMenu').classList.add('hidden'));
+
+        // Close modals on backdrop click
+        ['cartModal','loginModal','registerModal','productDetailModal','ordersModal'].forEach(id => {
+            document.getElementById(id).addEventListener('click', function(e) {
+                if (e.target === this) this.classList.add('hidden');
+            });
+        });
+
+        // ========== TOAST ==========
+        function showToast(msg, type = 'success') {
+            const colors = { success: 'bg-green-700', error: 'bg-red-600', warning: 'bg-amber-500' };
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-6 left-1/2 -translate-x-1/2 ${colors[type]} text-white px-6 py-3 rounded-full shadow-xl z-[100] text-sm font-semibold transition-all`;
+            toast.textContent = msg;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // ========== INIT ==========
+        loadProducts();
+        updateCartUI();
+        updateAuthUI();
+    </script>
+</body>
+</html>
